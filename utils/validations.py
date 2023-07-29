@@ -15,7 +15,7 @@ def name_validation():
         name = input("Insira o nome do usuário: ")
 
         if re.match(standard, name):
-            return name.capitalize()
+            return name.upper()
         else:
             print("Você não digitou um nome válido. Tente novamente.")
 
@@ -125,7 +125,7 @@ def cep_validation():
     """Verifica o CEP e fornece o endereço.
 
     Returns:
-        dict: Fornece o endereço no formato de dicionário.
+        dict: Retorna o endereço associado ao CEP.
     """
     while True:
         cep = input("Endereço do CEP (apenas números): ")
@@ -136,7 +136,11 @@ def cep_validation():
         try:
             url = f"http://viacep.com.br/ws/{cep}/json/"
             response = requests.get(url)
-            return response.json()
+
+            if "erro" in response.json():
+                print("Você não digitou um CEP válido. Tente novamente.")
+            else:
+                return response.json()
 
         except:
             print("Você não digitou um CEP válido. Tente novamente.")

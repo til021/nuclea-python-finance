@@ -1,4 +1,4 @@
 bugs.ipynb
 .vscode
-utils/validation
-utils/__pycache__
+*__pycache__
+tests/test_example.py
