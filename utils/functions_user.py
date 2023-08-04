@@ -1,7 +1,7 @@
 # %%
 import json
 
-from utils.validations import (
+from utils.user_validation import (
     name_validation,
     cpf_validation,
     rg_validation,
@@ -25,9 +25,9 @@ def receive_user():
     cpf = cpf_validation()
     rg = rg_validation()
     birth_day = birth_validation()
-    adress = cep_validation()
+    estado, cidade, bairro, logradouro, cep = cep_validation()
 
-    return name, cpf, rg, birth_day, adress
+    return name, cpf, rg, birth_day, estado, cidade, bairro, logradouro, cep
 
 
 # %%
@@ -36,7 +36,7 @@ def insert_user():
     Aplica a função 'receive_user()' e insere os dados no banco.
     """
 
-    name, cpf, rg, birth_day, adress = receive_user()
+    name, cpf, rg, birth_day, estado, cidade, bairro, logradouro, cep = receive_user()
     try:
         new_id = max([int(item) for item in data.keys()]) + 1
 
@@ -48,7 +48,11 @@ def insert_user():
         "CPF": cpf,
         "RG": rg,
         "Nascimento": birth_day,
-        "Endereço": adress,
+        "Estado": estado,
+        "Cidade": cidade,
+        "Bairro": bairro,
+        "Logradouro": logradouro,
+        "CEP": cep,
         "Status": "Ativo",
     }
 
@@ -69,22 +73,11 @@ def user_info(user_id=data.keys()):
         CPF: {data[id]['CPF']}
         RG: {data[id]['RG']}
         Nascimento: {data[id]['Nascimento']}
-        Endereço: {data[id]['Endereço']}     
+        Estado: {data[id]['Estado']}
+        Cidade: {data[id]['Cidade']}     
+        Bairro: {data[id]['Bairro']}     
+        Logradouro: {data[id]['Logradouro']}     
+        CEP: {data[id]['CEP']}     
         """
         )
         print("----------------------------------")
-
-
-# %%
-def save_n_leave():
-    """Salva as alterações realizadas."""
-
-    import json
-
-    commit = input("Deseja salvar as alterações? (y/n): ").lower()
-    if commit == "y":
-        with open("user_data.json", "w") as write_file:
-            json.dump(data, write_file)
-        print("Todas alterações foram salvas!")
-    else:
-        print("Não foram feitas alterações!")

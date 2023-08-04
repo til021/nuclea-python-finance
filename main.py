@@ -1,38 +1,42 @@
 # %%
-from utils.functions import insert_user, user_info, save_n_leave
+from utils.functions_main_menu import user_menu, titles_menu, wallet_menu, save_n_leave
+from repository import get_db_connection
 
 # %%
 
 
 def main():
-    working = True
+    connection = get_db_connection()
 
-    while working:
+    while connection:
+        cursor = connection.cursor()
+
         print(
             """
-            Sistema de Gerenciamento de Dados:
+            Bem vindo! O que deseja realizar hoje?:
                     
-            1 - Inserir Novo Usuário
-            4 - Informações de Usuário
-            7 - Salvar e Sair
+            1 - Consultar usuários
+            2 - Consultar títulos
+            3 - Consultar carteiras
+            4 - Salvar e sair
         """
         )
 
-        option = input("Escolha uma opção: ")
+        choosen_option = input("Escolha uma opção: ")
 
-        if option == "1":
-            user_info(insert_user())
+        if choosen_option == "1":
+            user_menu()
 
-        elif option == "4":
-            user_info()
+        elif choosen_option == "2":
+            titles_menu()
 
-        elif option == "7":
+        elif choosen_option == "3":
+            wallet_menu()
+
+        elif choosen_option == "4" or choosen_option == "":
             save_n_leave()
-            working = False
-
-        elif option == "":
-            print("Você escolheu sair. Nenhuma alteração foi salva.")
-            working = False
+            cursor.close()
+            connection.close()
 
         else:
             print("Opção inválida. Tente novamente.")

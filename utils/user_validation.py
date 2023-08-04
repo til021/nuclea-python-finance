@@ -41,7 +41,7 @@ def cpf_validation():
         cpf = input("Número do CPF (apenas números): ")
 
         if cpf == "":
-            return "Não informado"
+            return None
 
         elif validator.validate(cpf):
             formatted_cpf = validator.mask(cpf)
@@ -68,7 +68,7 @@ def rg_validation():
         rg = input("Número do RG (apenas números): ")
 
         if rg == "":
-            return "Não informado"
+            return None
 
         else:
             try:
@@ -97,7 +97,7 @@ def birth_validation():
         bd = input("Data de nascimento (dd/mm/aaaa): ")
 
         if bd == "":
-            return "Não informado"
+            return None
 
         try:
             bd_converted = datetime.strptime(bd, "%d/%m/%Y").date()
@@ -128,10 +128,10 @@ def cep_validation():
         dict: Retorna o endereço associado ao CEP.
     """
     while True:
-        cep = input("Endereço do CEP (apenas números): ")
+        cep_input = input("Endereço do CEP (apenas números): ")
 
-        if cep == "":
-            return "Não informado"
+        if cep_input == "":
+            return None, None, None, None, None
 
         try:
             url = f"http://viacep.com.br/ws/{cep}/json/"
@@ -140,7 +140,21 @@ def cep_validation():
             if "erro" in response.json():
                 print("Você não digitou um CEP válido. Tente novamente.")
             else:
-                return response.json()
+                adress = response.json()
+                try:
+                    estado = adress["uf"]
+                    cidade = adress["localidade"]
+                    bairro = adress["bairro"]
+                    logradouro = adress["logradouro"]
+                    cep = adress["cep"]
+                except:
+                    estado = None
+                    cidade = None
+                    bairro = None
+                    logradouro = None
+                    cep = None
+
+                return estado, cidade, bairro, logradouro, cep
 
         except:
             print("Você não digitou um CEP válido. Tente novamente.")

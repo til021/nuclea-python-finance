@@ -3,7 +3,7 @@ from unittest.mock import patch
 from validate_docbr import CPF
 from faker import Faker
 
-from utils.functions import receive_user
+from utils.functions_user import receive_user
 
 
 class TestStringMethods(unittest.TestCase):
@@ -32,9 +32,13 @@ class TestStringMethods(unittest.TestCase):
         expected_user = (
             name,
             CPF().mask(cpf),
-            "Não informado",
-            "Não informado",
-            "Não informado",
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
         )
 
         self.assertEquals(expected_user, received_user)
