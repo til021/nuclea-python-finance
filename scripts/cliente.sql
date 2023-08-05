@@ -1,10 +1,14 @@
-CREATE TABLE IF NOT EXISTS public.cliente
+CREATE TABLE IF NOT EXISTS public.users 
 (
-    id SERIAL PRIMARY KEY,
-    nome character varying(100) NOT NULL,
-    cpf character varying(14) NOT NULL UNIQUE,
-    rg character varying(20) NOT NULL,
-    data_nascimento date NOT NULL,
-    cep character varying(10) NOT NULL,
-    numero_residencia character varying(5) NOT NULL
+	id SERIAL PRIMARY KEY,
+    nome varchar(80) NOT NULL,
+    cpf char(14),
+    rg varchar(20),
+    birth_day date,
+    estado char(2),
+    cidade varchar(40),
+    bairro varchar(40),
+    logradouro varchar(40),
+    cep char(9),
+	status bool
 );

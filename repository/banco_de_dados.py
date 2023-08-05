@@ -1,6 +1,8 @@
 import psycopg2
 import os
 from dotenv import load_dotenv
+import yfinance as yf
+
 
 from utils.client_validation import (
     name_validation,
@@ -9,24 +11,7 @@ from utils.client_validation import (
     birth_validation,
     cep_validation,
 )
-
-# CLASSE:
-# FORMA DE BOLO, ESTEIRA DE PRODUÇÃO DE UM VEICULO;
-# ATRIBUTO/CARICTERISTICA;
-# CHASSI, COR, QUANTIDADE DE PORTAS, POTENCIA MOTOR, CAMBIO;
-# METODOS/FUNCOES:
-# ACOES, COMPORTAMENTO, 4X4, TURBO, ANDAR, ESTACIONAR, TROCAR DE MARCHA
-# __init__
-# Construcao do objeto
-# __del__
-# Delecao do objeto
-
-# java objeto = new Class();
-# python objeto = Class()
-
-# variavel = cliente
-# funcao = cliente()
-# classe = Cliente()
+from utils.analise_carteira import analise
 
 
 class BancoDeDados:
@@ -141,3 +126,68 @@ class BancoDeDados:
         self.connection.commit()
         self.selecionar_cliente(changed_id)
         print("Alterações salvas com sucesso.")
+
+    def receber_acao(self):
+        while True:
+            try:
+                acao_info = {
+                    "nome": input("nome: "),
+                    "ticket": input("ticket: "),
+                    "valor_compra": float(input("valor_compra: ")),
+                    "quantidade_compra": int(input("quantidade_compra: ")),
+                    "data_compra": input("data_compra: "),
+                    "client_id": int(input("client_id: ")),
+                }
+                return acao_info
+            except:
+                continue
+
+    def inserir_acao(self):
+        acao_info = self.receber_acao()
+        insert_query = """
+                INSERT INTO acao (nome, ticket, valor_compra, quantidade_compra, data_compra, client_id)
+                VALUES (%s, %s, %s, %s, %s, %s);
+                """
+        values = (
+            acao_info["nome"],
+            acao_info["ticket"],
+            acao_info["valor_compra"],
+            acao_info["quantidade_compra"],
+            acao_info["data_compra"],
+            acao_info["client_id"],
+        )
+        self.cursor.execute(insert_query, values)
+        self.connection.commit()
+        print("Alterações salvas com sucesso.")
+
+    def deletar_acao(self):
+        deleted_id = int(input("Qual o id da acao que você quer deletar? "))
+
+        delete_query = """
+               DElETE * FROM public.users WHERE id = %s;
+               """
+        values = (deleted_id,)
+        self.cursor.execute(delete_query, values)
+        self.connection.commit()
+        print("Alterações salvas com sucesso.")
+
+    def analise_carteira(self):
+        client_cpf = cpf_validation()
+        select_query = """SELECT a.ticket FROM acao as a INNER JOIN users as u ON a.cliente_id = u.id WHERE u.cpf = %s; 
+        """
+        values = (client_cpf,)
+        self.cursor.execute(select_query, values)
+        tickets = self.cursor.fetchall()
+        analise(tickets)
+
+    def relatorio_carteira(self):
+        client_cpf = cpf_validation()
+        select_query = """SELECT a.ticket FROM acao as a INNER JOIN users as u ON a.cliente_id = u.id WHERE u.cpf = %s; 
+        """
+        values = (client_cpf,)
+        self.cursor.execute(select_query, values)
+        tickets = self.cursor.fetchall()
+
+        for acao in tickets:
+            acao = yf.download(acao + ".SA", progress=False)
+            print(acao.tail(), "\n")
