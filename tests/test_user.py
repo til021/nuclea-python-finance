@@ -3,7 +3,7 @@ from unittest.mock import patch
 from validate_docbr import CPF
 from faker import Faker
 
-from utils.functions_user import receive_user
+from utils.functions_cliente import receive_user
 
 
 class TestStringMethods(unittest.TestCase):

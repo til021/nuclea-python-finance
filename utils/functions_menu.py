@@ -1,13 +1,7 @@
-from utils.functions_user import insert_user, user_info
-
-import json
-
-with open("user_data.json", "r") as data_file:
-    data = json.load(data_file)
+from repository.banco_de_dados import BancoDeDados
 
 
-# %%
-def user_menu():
+def menu_clientes():
     working = True
 
     while working:
@@ -15,27 +9,28 @@ def user_menu():
             """
            Consultar informações de usuário:
                     
-            1 - Inserir novo usuário
-            2 - Alterar informações de usuário
-            3 - Mostrar informações de usuário
-            4 - Desativar usuário
+            1 - Inserir novo cliente
+            2 - Alterar informações de cliente
+            3 - Mostrar informações de cliente
+            4 - Desativar cliente (deleção virtual)
             5 - Retornar ao menu anterior
         """
         )
 
         choosen_option = input("Escolha uma opção: ")
+        banco = BancoDeDados()
 
         if choosen_option == "1":
-            return user_info(insert_user())
+            return banco.inserir_cliente()
 
         elif choosen_option == "2":
-            return print("Essa opção ainda não foi implementada.")
+            return banco.alterar_cliente()
 
         elif choosen_option == "3":
-            return user_info()
+            return banco.selecionar_cliente()
 
         elif choosen_option == "4":
-            return print("Essa opção ainda não foi implementada.")
+            return banco.desativar_cliente()
 
         elif choosen_option == "5" or choosen_option == "":
             return
@@ -45,17 +40,17 @@ def user_menu():
 
 
 # %%
-def titles_menu():
+def menu_acoes():
     working = True
 
     while working:
         print(
             """
-           Consultar informações de títulos:
+           Consultar informações de ações:
                     
-            1 - Inserir novo título
-            2 - Mostrar informações de título
-            3 - Desativar título
+            1 - Inserir nova ação
+            2 - Mostrar cotação de ação
+            3 - Desativar ação
             4 - Retornar ao menu anterior
         """
         )
@@ -79,7 +74,7 @@ def titles_menu():
 
 
 # %%
-def wallet_menu():
+def menu_carteira():
     working = True
 
     while working:
@@ -113,15 +108,5 @@ def wallet_menu():
 
 
 # %%
-def save_n_leave():
-    """Salva as alterações realizadas."""
-
-    import json
-
-    commit = input("Deseja salvar as alterações? (y/N): ").lower()
-    if commit == "y":
-        with open("user_data.json", "w") as write_file:
-            json.dump(data, write_file)
-        print("Todas alterações foram salvas!")
-    else:
-        print("Nenhuma alteração foi salva!")
+def menu_relatorio():
+    return print("Seu relatório está sendo impresso!")

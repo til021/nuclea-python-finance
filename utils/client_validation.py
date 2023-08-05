@@ -12,7 +12,7 @@ def name_validation():
     standard = r"^[a-zA-Z\s]+$"
 
     while True:
-        name = input("Insira o nome do usuário: ")
+        name = input("Insira o nome do usuário (apenas letras): ")
 
         if re.match(standard, name):
             return name.upper()
@@ -134,7 +134,7 @@ def cep_validation():
             return None, None, None, None, None
 
         try:
-            url = f"http://viacep.com.br/ws/{cep}/json/"
+            url = f"http://viacep.com.br/ws/{cep_input}/json/"
             response = requests.get(url)
 
             if "erro" in response.json():

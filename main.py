@@ -1,42 +1,45 @@
 # %%
-from utils.functions_main_menu import user_menu, titles_menu, wallet_menu, save_n_leave
-from repository import get_db_connection
-
-# %%
+from utils.functions_menu import (
+    menu_clientes,
+    menu_acoes,
+    menu_carteira,
+    menu_relatorio,
+)
 
 
 def main():
-    connection = get_db_connection()
+    working = True
 
-    while connection:
-        cursor = connection.cursor()
-
+    while working:
         print(
             """
             Bem vindo! O que deseja realizar hoje?:
                     
-            1 - Consultar usuários
-            2 - Consultar títulos
-            3 - Consultar carteiras
-            4 - Salvar e sair
+            1 - Consultar Clientes
+            2 - Consultar Ações
+            3 - Analisar Carteira
+            4 - Relatório da Carteira
+            0 - Sair
         """
         )
 
         choosen_option = input("Escolha uma opção: ")
 
         if choosen_option == "1":
-            user_menu()
+            menu_clientes()
 
         elif choosen_option == "2":
-            titles_menu()
+            menu_acoes()
 
         elif choosen_option == "3":
-            wallet_menu()
+            menu_carteira()
 
-        elif choosen_option == "4" or choosen_option == "":
-            save_n_leave()
-            cursor.close()
-            connection.close()
+        elif choosen_option == "4":
+            menu_relatorio()
+
+        elif choosen_option == "0" or choosen_option == "":
+            print("Você escolheu sair.")
+            working = False
 
         else:
             print("Opção inválida. Tente novamente.")
