@@ -1,2 +1,1 @@
-DELETE FROM public.cliente
-	WHERE;
+DElETE * FROM public.users WHERE id = %s;

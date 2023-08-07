@@ -19,7 +19,9 @@ class BancoDeDados:
         # Carrega as variáveis de ambiente do arquivo .env
         load_dotenv()
         # Obtém os valores de conexão do ambiente usando 'os.getenv'
-        database_url = os.getenv("DATABASE_URL")
+        database_url = os.getenv(
+            "DATABASE_URL"
+        )  # exemplo: postgres://username:password@host:port/database_name
         self.connection = psycopg2.connect(database_url)
         print("Conexão ao banco de dados PostgreSQL realizada com sucesso!")
         self.cursor = self.connection.cursor()
@@ -172,13 +174,17 @@ class BancoDeDados:
         print("Alterações salvas com sucesso.")
 
     def analise_carteira(self):
-        client_cpf = cpf_validation()
-        select_query = """SELECT a.ticket FROM acao as a INNER JOIN users as u ON a.cliente_id = u.id WHERE u.cpf = %s; 
-        """
-        values = (client_cpf,)
-        self.cursor.execute(select_query, values)
-        tickets = self.cursor.fetchall()
-        analise(tickets)
+        while True:
+            try:
+                client_cpf = cpf_validation()
+                select_query = """SELECT a.ticket FROM acao as a INNER JOIN users as u ON a.cliente_id = u.id WHERE u.cpf = %s; 
+                """
+                values = (client_cpf,)
+                self.cursor.execute(select_query, values)
+                tickets = self.cursor.fetchall()
+                return analise(tickets)
+            except:
+                continue
 
     def relatorio_carteira(self):
         client_cpf = cpf_validation()

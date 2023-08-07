@@ -3,7 +3,9 @@ from unittest.mock import patch
 from validate_docbr import CPF
 from faker import Faker
 
-from utils.functions_cliente import receive_user
+from repository.banco_de_dados import BancoDeDados
+
+banco = BancoDeDados()
 
 
 class TestStringMethods(unittest.TestCase):
@@ -27,18 +29,21 @@ class TestStringMethods(unittest.TestCase):
         ]
 
         with patch("builtins.input", side_effect=inputs):
-            received_user = receive_user()
+            received_user = banco.receber_cliente()
 
-        expected_user = (
-            name,
-            CPF().mask(cpf),
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-            None,
-        )
+        expected_user = {}
+        expected_user["nome"] = name
+        expected_user["cpf"] = CPF().mask(cpf)
+        expected_user["rg"] = None
+        expected_user["birth_day"] = None
+        expected_user["estado"] = None
+        expected_user["cidade"] = None
+        expected_user["bairro"] = None
+        expected_user["logradouro"] = None
+        expected_user["cep"] = None
 
         self.assertEquals(expected_user, received_user)
+
+
+if __name__ == "__main__":
+    test_user_insertion()

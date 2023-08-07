@@ -104,7 +104,8 @@ def birth_validation():
             today = datetime.now().date()
 
             if bd_converted < today:
-                return bd_converted.strftime("%d/%m/%Y")
+                # return bd_converted.strftime("%d/%m/%Y")
+                return bd_converted
 
             else:
                 print("Você não digitou uma data válida. Tente novamente.")
